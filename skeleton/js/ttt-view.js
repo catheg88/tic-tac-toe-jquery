@@ -19,20 +19,23 @@ View.prototype.bindEvents = function () {
 View.prototype.makeMove = function ($square) {
   var pos = $square.attr('data-pos');
   pos = [parseInt(pos[0]), parseInt(pos[2])];
-  if(!this.game.board.constructor.isValidPos(pos) || !this.game.board.isEmptyPos(pos)) {
-    // try {
-    //
-    // } catch (e) {
-    //
-    // }
+  // if(!this.game.board.constructor.isValidPos(pos) || !this.game.board.isEmptyPos(pos)) {
+  // }
+
+  var currMark = this.game.currentPlayer;
+  try {
+    this.game.playMove(pos);
+    $square.text(currMark);
+  } catch (e) {
     alert("Invalid position!");
   }
-
-  $square.text(this.game.currentPlayer);
-  this.game.playMove(pos);
   $square.css("background-color", "cornflowerblue");
   $square.hover(function() {$(this).css('background-color', 'cornflowerblue')}, function() {$(this).css('background-color', 'cornflowerblue')});
 
+  this.gameOverAlert();
+};
+
+View.prototype.gameOverAlert = function() {
   if(this.game.isOver()) {
     if(this.game.winner()) {
       this.game.swapTurn();
@@ -41,7 +44,7 @@ View.prototype.makeMove = function ($square) {
       alert("Cat's game");
     }
   }
-};
+}
 
 View.prototype.setupBoard = function () {
   var $ul = $('<ul></ul>');
